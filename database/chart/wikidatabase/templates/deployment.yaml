@@ -5,6 +5,14 @@ metadata:
   labels:
     {{- include "wikidatabase.labels" . | nindent 4 }}
 spec:
+  minReadySeconds: 10
+  progressDeadlineSeconds: 600
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 10%
+    type: RollingUpdate
+
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
@@ -37,14 +45,6 @@ spec:
             - name: http
               containerPort: 3306
               protocol: TCP
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
           livenessProbe:
             exec:
               command: ["mysqladmin", "ping"]
