@@ -8,7 +8,7 @@ image:
   repository: docker9419/databasewiki
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1"
+  tag: "v2"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -71,10 +71,10 @@ readinessProbe:
 resources:
    limits:
      cpu: 100m
-     memory: 128Mi
+     memory: 256Mi
    requests:
      cpu: 100m
-     memory: 128Mi
+     memory: 256Mi
 
 autoscaling:
   enabled: false
