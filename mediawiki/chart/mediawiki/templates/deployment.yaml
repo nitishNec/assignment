@@ -5,6 +5,15 @@ metadata:
   labels:
     {{- include "mediawiki.labels" . | nindent 4 }}
 spec:
+  minReadySeconds: 10
+  progressDeadlineSeconds: 600
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 10%
+    type: RollingUpdate
+
+  revisionHistoryLimit: 10
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
