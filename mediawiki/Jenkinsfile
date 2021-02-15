@@ -1,0 +1,43 @@
+## This Jenkinsfile is reference for CI and Gitops   
+
+pipeline 
+{
+    agent any
+    stages
+     {
+        stage('Create Docker image'){
+             steps{
+			     sh 'cd "$JENKINS_HOME/workspace/$JOB_NAME"'
+                 sh returnStdout: true, script: '/bin/docker build . -t docker9419/mediawiki:${BUILD_NUMBER}
+                 }
+             
+        }
+         
+        stage('Push image to registery'){
+             steps{
+					echo  "\u2600 **********PUSH APP DOCKER IMAGE to Registery*****************"
+					sh 'docker login -u $USER -p $PASSWORD'
+					sh returnStdout: true, script: '/bin/docker push docker9419/mediawiki:${BUILD_NUMBER}'
+             }
+        }
+        
+        stage('Tag changed in manifest repo'){
+            steps{
+				echo  "\u2600 **********checkout manifest repo and modified the Tag (argoCd will get triggered) *****************"
+				checkout([$class: 'GitSCM', branches: [[name: "master"]], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Default', submoduleCfg: [], userRemoteConfigs: [[credentialsId: "", url: ""]]])
+				dir('assignment/mediawiki/chart/mediawiki/') //This value  need to be defined based on actual path
+				{
+				ssh 'sed -i "s/tag:*/tag:${BUILD_NUMBER}/g" values.yaml'
+				sh 'git add * '
+				sh 'git commit -m "release version ${BUILD_NUMBER} created "'
+	
+				}
+				sh 'git push -f https://$GITUSERNAME:$GITPASSWORD@$GITREMOTEURL HEAD:master'
+	
+				echo  "\u2600 **********Triggered ArgoCD *****************"
+            }
+        }
+        
+    }
+         
+}
