@@ -25,7 +25,7 @@ pipeline
             steps{
 				echo  "\u2600 **********checkout manifest repo and modified the Tag (argoCd will get triggered) *****************"
 				checkout([$class: 'GitSCM', branches: [[name: "master"]], doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Default', submoduleCfg: [], userRemoteConfigs: [[credentialsId: "", url: ""]]])
-				dir('assignment/database/chart/wikidatabase/')
+				dir('assignment/database/chart/wikidatabase/') //This value  need to be defined based on actual path
 				{
 				ssh 'sed -i "s/tag:*/tag:${BUILD_NUMBER}/g" values.yaml'
 				sh 'git add * '
