@@ -2,7 +2,7 @@
 
 pipeline 
 {
-    agent  { label 'resiliency' }
+    agent any
     stages
      {
         stage('Create Docker image'){
