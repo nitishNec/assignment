@@ -13,7 +13,7 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
+secret: "mysqlsecret"
 database_host_name: "wikidatabase"
 database_name: "wikidatabase"
 database_username: "root"

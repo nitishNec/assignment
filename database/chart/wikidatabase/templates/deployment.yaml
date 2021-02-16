@@ -68,22 +68,22 @@ spec:
             valueFrom:
               secretKeyRef:
                 key:  database_host_name
-                name: {{ .Release.Name }}-auth
+                name: {{ .Values.secret }}-auth
           - name: DATABASE_NAME
             valueFrom:
               secretKeyRef:
                 key:  database_name
-                name: {{ .Release.Name }}-auth
+                name: {{ .Values.secret }}-auth
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:
                 key:  database_username
-                name: {{ .Release.Name }}-auth
+                name: {{ .Values.secret }}-auth
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 key:  database_password
-                name: {{ .Release.Name }}-auth
+                name: {{ .Values.secret }}-auth
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
