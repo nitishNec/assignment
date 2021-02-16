@@ -65,9 +65,15 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
           - name: DB_HOST_NAME
-            value: {{ .Values.database_hostname }}   
+            valueFrom:
+              secretKeyRef:
+                key:  database_host_name
+                name: {{ .Release.Name }}-auth
           - name: DATABASE_NAME
-            value: {{ .Values.database_name }}
+            valueFrom:
+              secretKeyRef:
+                key:  database_name
+                name: {{ .Release.Name }}-auth
           - name: DB_USERNAME
             valueFrom:
               secretKeyRef:

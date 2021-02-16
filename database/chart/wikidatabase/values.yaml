@@ -14,7 +14,7 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-database_hostname: "wikidatabase"
+database_host_name: "wikidatabase"
 database_name: "wikidatabase"
 database_username: "root"
 database_password: "password"
