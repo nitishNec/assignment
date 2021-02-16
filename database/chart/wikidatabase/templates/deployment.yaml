@@ -37,7 +37,6 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
-          command: ['sh', '-c', '/docker-entrypoint-initdb.d/run.sh']
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -64,6 +63,21 @@ spec:
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          - name: DB_HOST_NAME
+            value: {{ .Values.database_hostname }}   
+          - name: DATABASE_NAME
+            value: {{ .Values.database_name }}
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                key:  database_username
+                name: {{ .Release.Name }}-auth
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key:  database_password
+                name: {{ .Release.Name }}-auth
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
